@@ -10,8 +10,6 @@ import axios from 'axios'
 
 const colors = scaleOrdinal(schemeCategory10).range();
 
-const data = []
-
 export default function ScatterPlot() {
     const [selectedSpeciesObj] = useContext(StarWarContext);
     const [loading, setLoading] = React.useState(false);
@@ -57,6 +55,21 @@ export default function ScatterPlot() {
                 })
             })
         }
+        const CustomTooltip = () => {
+            console.log(data)
+                return (
+                    <div className="custom-tooltip">
+                        {data.map((res)=>
+                             <div>
+                                 <p className="name"><b>name</b> :{res.name}</p>
+                               <p className="gender"><b>gender</b> :{res.gender}</p>
+                                 </div>
+                             
+                        )}
+                       
+                    </div>
+                );
+                }
 
     return (
         <ScatterChart
@@ -69,7 +82,7 @@ export default function ScatterPlot() {
             <XAxis type="number" dataKey="x" name="height" unit="cm" />
             <YAxis type="number" dataKey="y" name="mass" unit="kg" />
 
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} label="priyanka"/>
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip/>}/>
             <Scatter name="A school" data={data} fill="#8884d8">
                 {
                     data.map((entry, index) => <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />)
