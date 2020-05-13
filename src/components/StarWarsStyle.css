@@ -1,6 +1,9 @@
 .main-container{
   margin: 20px;  
 }
+.main-container .MuiCard-root{
+  box-shadow: 5px 10px lightgray;
+}
 .select-option{
   display: inline-flex;
   align-items: center;

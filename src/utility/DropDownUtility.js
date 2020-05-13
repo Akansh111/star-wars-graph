@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
 import { Loading } from './Loader';
 import { SPECIES_URL } from '../constants/constants';
+import {StarWarContext} from '../context/CreateContext';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -22,12 +22,14 @@ const useStyles = makeStyles((theme) => ({
 export default function SimpleSelect() {
     const classes = useStyles();
     const [species, setSpecies] = React.useState('');
-    const [selectedSpeciesObj, setSelectedSpeciesObj] = React.useState();
+    const [selectedSpeciesObj, setSelectedSpeciesObj] = useContext(StarWarContext);
     const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
         loadSpecies();
     }, [])
+
+    
 
     const loadSpecies = () => {
         let speciesResponse = [];
@@ -37,6 +39,8 @@ export default function SimpleSelect() {
         })
 
         Promise.all(speciesResponse).then(allSpeciesData => {
+            console.log(allSpeciesData);
+
             setSpecies(allSpeciesData.flat());
             setSelectedSpeciesObj(allSpeciesData[0][0]);
             setLoading(false);
@@ -44,7 +48,6 @@ export default function SimpleSelect() {
             console.log("Something went wrong. Please try again");
             setLoading(false);
         })
-
     }
 
     const getData = (url) => {
@@ -58,9 +61,9 @@ export default function SimpleSelect() {
         })
     }
 
-
     const handleChange = (event) => {
         setSelectedSpeciesObj(species.find(selected => selected.name === event.target.value));
+        console.log(selectedSpeciesObj)
     };
 
     return (
@@ -73,6 +76,7 @@ export default function SimpleSelect() {
                             labelId="demo-simple-select-filled-label"
                             id="demo-simple-select-filled"
                             value={species}
+                            selectedSpeciesObj={selectedSpeciesObj}
                             onChange={(e) => handleChange(e)}>
                             {species && species.map((res, index) =>
                                 <MenuItem key={index} value={res.name}>{res.name}</MenuItem>
