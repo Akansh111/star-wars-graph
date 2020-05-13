@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
+import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import axios from 'axios'
+
+import { Loading } from './Loader';
+import { SPECIES_URL } from '../constants/constants';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -19,34 +22,66 @@ const useStyles = makeStyles((theme) => ({
 export default function SimpleSelect() {
     const classes = useStyles();
     const [species, setSpecies] = React.useState('');
+    const [selectedSpeciesObj, setSelectedSpeciesObj] = React.useState();
+    const [loading, setLoading] = React.useState(false);
 
-    useEffect(async () => {
-        axios.get('https://swapi.dev/api/species')
-            .then(res => {
-                const speciesData = res.data.results;
-                console.log(speciesData)
-                setSpecies(speciesData);
-            })
+    useEffect(() => {
+        loadSpecies();
     }, [])
 
+    const loadSpecies = () => {
+        let speciesResponse = [];
+        setLoading(true);
+        SPECIES_URL.forEach(url => {
+            speciesResponse.push(getData(url));
+        })
+
+        Promise.all(speciesResponse).then(allSpeciesData => {
+            setSpecies(allSpeciesData.flat());
+            setSelectedSpeciesObj(allSpeciesData[0][0]);
+            setLoading(false);
+        }).catch((err) => {
+            console.log("Something went wrong. Please try again");
+            setLoading(false);
+        })
+
+    }
+
+    const getData = (url) => {
+        return new Promise((resolve, reject) => {
+            axios.get(url)
+                .then(res => {
+                    resolve(res.data.results);
+                }).catch((err) => {
+                    reject(err);
+                })
+        })
+    }
+
+
     const handleChange = (event) => {
-        console.log(event);
-        setSpecies(event.target.value);
+        setSelectedSpeciesObj(species.find(selected => selected.name === event.target.value));
     };
 
     return (
         <div>
-            <FormControl variant="filled" className={classes.formControl}>
-                <InputLabel id="demo-simple-select-filled-label">{species && species[0].name}</InputLabel>
-                <Select
-                    labelId="demo-simple-select-filled-label"
-                    id="demo-simple-select-filled"
-                    onChange={(e) => handleChange(e)}>
-                    {species && species.map((res) =>
-                        <MenuItem value={res.name}>{res.name}</MenuItem>
-                    )}
-                </Select>
-            </FormControl>
+            {
+                !loading ?
+                    <FormControl variant="filled" className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-filled-label">{selectedSpeciesObj ? selectedSpeciesObj.name : ''}</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            value={species}
+                            onChange={(e) => handleChange(e)}>
+                            {species && species.map((res, index) =>
+                                <MenuItem key={index} value={res.name}>{res.name}</MenuItem>
+                            )}
+                        </Select>
+                    </FormControl> :
+                    <Loading />
+            }
+
         </div>
     );
 }
