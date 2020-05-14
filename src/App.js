@@ -5,7 +5,7 @@ import { StarWarComponent } from './components/StarWars';
 function App() {
   return (
     <div className="App">
-    <StarWarComponent/>
+      <StarWarComponent />
     </div>
   );
 }

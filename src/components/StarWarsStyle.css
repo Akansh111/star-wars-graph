@@ -1,13 +1,13 @@
 .main-container{
-  margin: 20px; 
+  padding: 20px; 
   height: auto;
   overflow: hidden; 
 }
+
 .main-container .MuiCard-root{
   box-shadow: 5px 10px lightgray;
 }
 .select-option{
-  /* display: inline-flex; */
   align-items: center;
 }
 .dropdown-header{
@@ -26,4 +26,7 @@ color: black;
 }
 .recharts-xAxis text.recharts-label {
   transform: translate(0, 24px)
+}
+.MuiInputBase-root.MuiFilledInput-root, .MuiInputBase-root.MuiFilledInput-root:hover {
+  background: white;
 }
