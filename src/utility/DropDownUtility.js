@@ -1,4 +1,7 @@
-import React, { useEffect, useContext } from 'react';
+// *** DropDown component showing all the species present in star Wars Universe  *** //
+
+
+import React, { useEffect, useContext ,useState} from 'react';
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -8,6 +11,7 @@ import Select from '@material-ui/core/Select';
 import { Loading } from './Loader';
 import { SPECIES_URL } from '../constants/constants';
 import { StarWarContext } from '../context/CreateContext';
+import {ErrorTemplate} from './ErrorTemplate'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -21,13 +25,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleSelect() {
     const classes = useStyles();
-    const [species, setSpecies] = React.useState('');
+    const [species, setSpecies] = useState('');
     const [selectedSpeciesObj, setSelectedSpeciesObj] = useContext(StarWarContext);
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
 
     useEffect(() => {
         loadSpecies();
     }, [])
+
+    // loading species Data //
 
     const loadSpecies = () => {
         let speciesResponse = [];
@@ -40,7 +47,8 @@ export default function SimpleSelect() {
             setSpecies(allSpeciesData.flat());
             setSelectedSpeciesObj(allSpeciesData[0][0]);
             setLoading(false);
-        }).catch((err) => {
+           }).catch((err) => {
+               setErrorMessage(true);
             console.log("Something went wrong. Please try again");
             setLoading(false);
         })
@@ -60,10 +68,10 @@ export default function SimpleSelect() {
     const handleChange = (event) => {
         setSelectedSpeciesObj(species.find(selected => selected.name === event.target.value));
     };
-
     return (
         <div>
-            {
+            {errorMessage ? <ErrorTemplate value="Fetch species data failed"/> :
+            
                 !loading ?
                     <FormControl variant="filled" className={classes.formControl}>
                         <InputLabel id="demo-simple-select-filled-label">{selectedSpeciesObj ? selectedSpeciesObj.name : ''}</InputLabel>
@@ -79,7 +87,6 @@ export default function SimpleSelect() {
                     </FormControl> :
                     <Loading />
             }
-
         </div>
     );
 }

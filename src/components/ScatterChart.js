@@ -1,4 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+// *** scatterChart component showing plot of species from star wars univerese *** //
+
+import React, { useContext, useEffect ,useState} from 'react';
 import {
     ScatterChart, Scatter, XAxis, YAxis, Tooltip, Cell, Label
 } from 'recharts';
@@ -8,17 +10,24 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 import { StarWarContext } from '../context/CreateContext'
 import { Loading } from '../utility/Loader';
 import './StarWarsStyle.css';
+import { ErrorTemplate } from '../utility/ErrorTemplate'
+
 
 const colors = scaleOrdinal(schemeCategory10).range();
 
 export default function ScatterPlot() {
     const [selectedSpeciesObj] = useContext(StarWarContext);
-    const [loading, setLoading] = React.useState(false);
-    const [chartData, setChartData] = React.useState([]);
+    const [loading, setLoading] = useState(false);
+    const [chartData, setChartData] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(false);
+
 
     useEffect(() => {
         loadPeople();
     }, [selectedSpeciesObj])
+
+
+    //  loading people data   // 
 
     const loadPeople = () => {
         let peopleResponse = [];
@@ -29,6 +38,7 @@ export default function ScatterPlot() {
         Promise.all(peopleResponse).then(allPeopleData => {
             let data = [];
             allPeopleData && allPeopleData.forEach((res) => {
+                //setting the 'unknown' value in data to 0 so as to plot the point //
                 const height = res.height !== 'unknown' ? res.height : 0;
                 const mass = res.mass !== 'unknown' ? res.mass : 0;
                 data.push({ x: height, y: mass, z: res.name, a: res.gender, b: res.mass });
@@ -36,6 +46,7 @@ export default function ScatterPlot() {
             })
             setLoading(false);
         }).catch((err) => {
+            setErrorMessage(true);
             console.log("Something went wrong. Please try again");
             setLoading(false);
         })
@@ -51,6 +62,9 @@ export default function ScatterPlot() {
                 })
         })
     }
+
+    // custom ToolTip to show details of plotted points //
+
     const CustomTooltip = ({ active, payload, label }) => {
         if (active) {
             return (
@@ -70,7 +84,7 @@ export default function ScatterPlot() {
     return (
         <div className="card plot-card">
             <div className="card-body ">
-                {
+                {errorMessage ? <ErrorTemplate value="Fetch People data failed" /> :
                     !loading ?
                         <ScatterChart
                             width={500}

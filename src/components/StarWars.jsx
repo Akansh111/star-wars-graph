@@ -1,3 +1,4 @@
+// main component to load dropDown and scatterPlot//
 import React from 'react';
 import ScatterPlot from './ScatterChart';
 import SimpleSelect from '../utility/DropDownUtility'
@@ -15,13 +16,15 @@ export const StarWarComponent = (props) => {
                     <img src={logo} width="150px" height="150px" alt="Star Wars"/>
                 </div>
             </div>
+            <StarWarsContextProvider>
             <div className='select-option'>
-                <div className='dropdown-header'>Pick a Species</div>
-                <StarWarsContextProvider>
+                <label className='dropdown-header'>Pick a Species</label>
+                
                     <SimpleSelect></SimpleSelect>
+                    </div>
                     <ScatterPlot></ScatterPlot>
                 </StarWarsContextProvider>
-            </div>
+            
         </div>
 
     )
