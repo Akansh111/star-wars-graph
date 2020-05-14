@@ -61,18 +61,18 @@ export default function ScatterPlot() {
                     <div className="custom-tooltip">
                         {data.map((res)=>
                              <div>
-                                 <p className="name"><b>name</b> :{res.name}</p>
-                               <p className="gender"><b>gender</b> :{res.gender}</p>
-                                 </div>
-                             
-                        )}
-                       
+                                 <p className="name"><b>Name</b> :{res.name}</p>
+                               <p className="gender"><b>Gender</b> :{res.gender}</p>
+                                 </div>                            
+                        )}  
                     </div>
                 );
                 }
 
     return (
-        <ScatterChart
+        <div className="card plot-card">
+            <div className="card-body ">
+       <ScatterChart
             width={500}
             height={500}
             margin={{
@@ -81,7 +81,6 @@ export default function ScatterPlot() {
         >
             <XAxis type="number" dataKey="x" name="height" unit="cm" />
             <YAxis type="number" dataKey="y" name="mass" unit="kg" />
-
             <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip/>}/>
             <Scatter name="A school" data={data} fill="#8884d8">
                 {
@@ -89,6 +88,8 @@ export default function ScatterPlot() {
                 }
             </Scatter>
         </ScatterChart>
+        </div>
+        </div>
     );
 
 }

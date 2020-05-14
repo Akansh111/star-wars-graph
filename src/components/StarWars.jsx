@@ -9,16 +9,14 @@ export const StarWarComponent = (props) => {
 
     return (
         <div className="main-container">
-            <CardComponent heading='Star Wars Universe'></CardComponent>
+            <div className="card-heading col-sm-12 col-xs-12 col-md-12"><CardComponent heading='Star Wars Universe'></CardComponent></div>
             <div className='select-option'>
                 <div className='dropdown-header'>Pick a Species</div>
                 <StarWarsContextProvider>
                 <SimpleSelect></SimpleSelect>
                 <ScatterPlot></ScatterPlot>
-                </StarWarsContextProvider>
-               
+                </StarWarsContextProvider>              
             </div>
-
         </div>
 
     )

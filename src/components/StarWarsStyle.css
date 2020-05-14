@@ -1,11 +1,13 @@
 .main-container{
-  margin: 20px;  
+  margin: 20px; 
+  height: auto;
+  overflow: hidden; 
 }
 .main-container .MuiCard-root{
   box-shadow: 5px 10px lightgray;
 }
 .select-option{
-  display: inline-flex;
+  /* display: inline-flex; */
   align-items: center;
 }
 .dropdown-header{
@@ -15,4 +17,10 @@ color: black;
   background-color: white;
   padding: 8px;
   border:1px solid lightgray;
+}
+.plot-card{
+  box-shadow: 5px 10px lightgray;
+  align-items: center;
+  display: inline-flex !important;
+
 }

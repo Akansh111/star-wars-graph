@@ -15,6 +15,8 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: 22,
+    color:'black',
+    opacity:'60%'
   },
   pos: {
     marginBottom: 12,
