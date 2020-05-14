@@ -1,4 +1,14 @@
-// main component to load dropDown and scatterPlot//
+/**
+ * main component which loads dropdown and scatterPlot components.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <ScatterChart>
+ * <SimpleSelect></SimpleSelect>
+ * <ScatterPlot></ScatterPlot>
+ * )
+ */
 import React from 'react';
 import ScatterPlot from './ScatterChart';
 import SimpleSelect from '../utility/DropDownUtility'
@@ -13,7 +23,8 @@ export const StarWarComponent = (props) => {
         <div className="main-container">
             <div className="card-heading col-sm-12 col-xs-12 col-md-12">
                 <div className="logo">
-                    <img src={logo} width="150px" height="150px" alt="Star Wars"/>
+                    <img src={logo} width="120px" height="120px" alt="Star Wars"/>
+                    <p className="app-description">Graphical represetation of different star wars species selected from dropdown</p>
                 </div>
             </div>
             <StarWarsContextProvider>

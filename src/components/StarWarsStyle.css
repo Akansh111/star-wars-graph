@@ -1,9 +1,11 @@
 .main-container{
-  padding: 20px; 
   height: auto;
   overflow: hidden; 
 }
-
+.app-description{
+  color:white;
+  opacity: 60%;
+}
 .main-container .MuiCard-root{
   box-shadow: 5px 10px lightgray;
 }

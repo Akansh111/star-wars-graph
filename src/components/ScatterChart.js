@@ -1,5 +1,15 @@
-// *** scatterChart component showing plot of species from star wars univerese *** //
-
+/**
+ * Component for showing details of the people data.
+ * 
+ * @component
+ * @example
+ * const data = [{x:200 , y:300}]
+ * return (
+ *   <ScatterChart>
+ * <Scatter data={chartData}</Scatter>
+ * </ScatterChart>
+ * )
+ */
 import React, { useContext, useEffect ,useState} from 'react';
 import {
     ScatterChart, Scatter, XAxis, YAxis, Tooltip, Cell, Label
@@ -27,8 +37,7 @@ export default function ScatterPlot() {
     }, [selectedSpeciesObj])
 
 
-    //  loading people data   // 
-
+    /** reitreving people's data from multiple people API and setting chartData  */
     const loadPeople = () => {
         let peopleResponse = [];
         setLoading(true);
@@ -38,9 +47,10 @@ export default function ScatterPlot() {
         Promise.all(peopleResponse).then(allPeopleData => {
             let data = [];
             allPeopleData && allPeopleData.forEach((res) => {
-                //setting the 'unknown' value in data to 0 so as to plot the point //
-                const height = res.height !== 'unknown' ? res.height : 0;
-                const mass = res.mass !== 'unknown' ? res.mass : 0;
+                
+                /**setting the 'unknown' value in data to 0 so as to plot the point */
+                const height = res.height !== 'unknown' ? res.height.split(',').join('') : 0;
+                const mass = res.mass !== 'unknown' ? res.mass.split(',').join('') : 0;
                 data.push({ x: height, y: mass, z: res.name, a: res.gender, b: res.mass });
                 setChartData(data);
             })
@@ -63,9 +73,9 @@ export default function ScatterPlot() {
         })
     }
 
-    // custom ToolTip to show details of plotted points //
-
-    const CustomTooltip = ({ active, payload, label }) => {
+    /**custom ToolTip function which accepts the payload as parametres and
+      returns the element containing all details of people data **/
+    const CustomTooltip = ({ active, payload }) => {
         if (active) {
             return (
                 <div className="custom-tooltip">
@@ -88,7 +98,7 @@ export default function ScatterPlot() {
                     !loading ?
                         <ScatterChart
                             width={500}
-                            height={500}
+                            height={440}
                             margin={{
                                 top: 20, right: 20, bottom: 20, left: 20,
                             }}

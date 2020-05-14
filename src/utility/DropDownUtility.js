@@ -1,5 +1,4 @@
-// *** DropDown component showing all the species present in star Wars Universe  *** //
-
+/** dropdown component showing list of species data in dropdown.*/
 
 import React, { useEffect, useContext ,useState} from 'react';
 import axios from 'axios'
@@ -34,7 +33,7 @@ export default function SimpleSelect() {
         loadSpecies();
     }, [])
 
-    // loading species Data //
+    /** reitreving species data from multiple species API and setting species data **/
 
     const loadSpecies = () => {
         let speciesResponse = [];
@@ -64,7 +63,7 @@ export default function SimpleSelect() {
                 })
         })
     }
-
+/** onChnage function which returns selected value from dropdown list */
     const handleChange = (event) => {
         setSelectedSpeciesObj(species.find(selected => selected.name === event.target.value));
     };
