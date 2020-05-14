@@ -1,24 +1,20 @@
 import React, { useContext, useEffect } from 'react';
 import {
-    ScatterChart, Scatter, XAxis, YAxis, Tooltip, Cell
+    ScatterChart, Scatter, XAxis, YAxis, Tooltip, Cell, Label
 } from 'recharts';
+import axios from 'axios';
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 import { StarWarContext } from '../context/CreateContext'
 import { Loading } from '../utility/Loader';
-import axios from 'axios'
+import './StarWarsStyle.css';
 
 const colors = scaleOrdinal(schemeCategory10).range();
 
 export default function ScatterPlot() {
     const [selectedSpeciesObj] = useContext(StarWarContext);
     const [loading, setLoading] = React.useState(false);
-    const [data, setData]=React.useState([]);
-
-    
-      useEffect(()=>{
-        setData(data)
-      })
+    const [chartData, setChartData] = React.useState([]);
 
     useEffect(() => {
         loadPeople();
@@ -31,14 +27,14 @@ export default function ScatterPlot() {
             peopleResponse.push(getPeopleData(url))
         })
         Promise.all(peopleResponse).then(allPeopleData => {
-            let data=[];
-            let selectedPeopleData = (allPeopleData.flat());
-            setLoading(false);
-            selectedPeopleData && selectedPeopleData.map((res)=>{
-           data.push({ x: res.height, y: res.mass ,name:res.name, gender:res.gender});
-           setData(data)
-           console.log(data)
+            let data = [];
+            allPeopleData && allPeopleData.forEach((res) => {
+                const height = res.height !== 'unknown' ? res.height : 0;
+                const mass = res.mass !== 'unknown' ? res.mass : 0;
+                data.push({ x: height, y: mass, z: res.name, a: res.gender, b: res.mass });
+                setChartData(data);
             })
+            setLoading(false);
         }).catch((err) => {
             console.log("Something went wrong. Please try again");
             setLoading(false);
@@ -53,42 +49,52 @@ export default function ScatterPlot() {
                 }).catch((err) => {
                     reject(err);
                 })
-            })
-        }
-        const CustomTooltip = () => {
-            console.log(data)
-                return (
-                    <div className="custom-tooltip">
-                        {data.map((res)=>
-                             <div>
-                                 <p className="name"><b>Name</b> :{res.name}</p>
-                               <p className="gender"><b>Gender</b> :{res.gender}</p>
-                                 </div>                            
-                        )}  
+        })
+    }
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active) {
+            return (
+                <div className="custom-tooltip">
+                    <div>
+                        <p className="name"><b>Name</b>: {payload[0].payload.z}</p>
+                        <p className="gender"><b>Gender</b>: {payload[0].payload.a}</p>
+                        <p className="height"><b>Height</b>: {payload[0].value}</p>
+                        <p className="mass"><b>Mass</b>: {payload[0].payload.b}</p>
                     </div>
-                );
-                }
+                </div>
+            );
+        }
+        return null;
+    }
 
     return (
         <div className="card plot-card">
             <div className="card-body ">
-       <ScatterChart
-            width={500}
-            height={500}
-            margin={{
-                top: 20, right: 20, bottom: 20, left: 20,
-            }}
-        >
-            <XAxis type="number" dataKey="x" name="height" unit="cm" />
-            <YAxis type="number" dataKey="y" name="mass" unit="kg" />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip/>}/>
-            <Scatter name="A school" data={data} fill="#8884d8">
                 {
-                    data.map((entry, index) => <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />)
+                    !loading ?
+                        <ScatterChart
+                            width={500}
+                            height={500}
+                            margin={{
+                                top: 20, right: 20, bottom: 20, left: 20,
+                            }}
+                        >
+                            <XAxis type="number" dataKey="x" name="height" unit="cm">
+                                <Label value="Height" position="center" style={{ textAnchor: 'middle' }} offset={100} />
+                            </XAxis>
+                            <YAxis type="number" dataKey="y" name="mass" unit="kg">
+                                <Label value="Mass" position="left" style={{ textAnchor: 'middle' }} offset={10} angle={270} />
+                            </YAxis>
+
+                            <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip />} />
+                            <Scatter data={chartData} fill="#8884d8">
+                                {
+                                    chartData.map((entry, index) => <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />)
+                                }
+                            </Scatter>
+                        </ScatterChart> : <Loading />
                 }
-            </Scatter>
-        </ScatterChart>
-        </div>
+            </div>
         </div>
     );
 

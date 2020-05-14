@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
+import ScatterPlot from './ScatterChart';
 import CardComponent from '../utility/CardUtil';
 import SimpleSelect from '../utility/DropDownUtility'
+import { StarWarsContextProvider } from '../context/CreateContext';
 import './StarWarsStyle.css';
-import ScatterPlot from './ScatterChart';
-import {StarWarsContextProvider} from '../context/CreateContext'
 
 export const StarWarComponent = (props) => {
 
@@ -13,9 +13,9 @@ export const StarWarComponent = (props) => {
             <div className='select-option'>
                 <div className='dropdown-header'>Pick a Species</div>
                 <StarWarsContextProvider>
-                <SimpleSelect></SimpleSelect>
-                <ScatterPlot></ScatterPlot>
-                </StarWarsContextProvider>              
+                    <SimpleSelect></SimpleSelect>
+                    <ScatterPlot></ScatterPlot>
+                </StarWarsContextProvider>
             </div>
         </div>
 

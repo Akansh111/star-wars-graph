@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Loading } from './Loader';
 import { SPECIES_URL } from '../constants/constants';
-import {StarWarContext} from '../context/CreateContext';
+import { StarWarContext } from '../context/CreateContext';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -29,8 +29,6 @@ export default function SimpleSelect() {
         loadSpecies();
     }, [])
 
-    
-
     const loadSpecies = () => {
         let speciesResponse = [];
         setLoading(true);
@@ -39,8 +37,6 @@ export default function SimpleSelect() {
         })
 
         Promise.all(speciesResponse).then(allSpeciesData => {
-            console.log(allSpeciesData);
-
             setSpecies(allSpeciesData.flat());
             setSelectedSpeciesObj(allSpeciesData[0][0]);
             setLoading(false);
@@ -63,7 +59,6 @@ export default function SimpleSelect() {
 
     const handleChange = (event) => {
         setSelectedSpeciesObj(species.find(selected => selected.name === event.target.value));
-        console.log(selectedSpeciesObj)
     };
 
     return (
@@ -76,7 +71,6 @@ export default function SimpleSelect() {
                             labelId="demo-simple-select-filled-label"
                             id="demo-simple-select-filled"
                             value={species}
-                            selectedSpeciesObj={selectedSpeciesObj}
                             onChange={(e) => handleChange(e)}>
                             {species && species.map((res, index) =>
                                 <MenuItem key={index} value={res.name}>{res.name}</MenuItem>

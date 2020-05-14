@@ -24,3 +24,6 @@ color: black;
   display: inline-flex !important;
 
 }
+.recharts-xAxis text.recharts-label {
+  transform: translate(0, 24px)
+}
