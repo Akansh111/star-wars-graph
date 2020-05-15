@@ -30,8 +30,6 @@ export default function ScatterPlot() {
     const [loading, setLoading] = useState(false);
     const [chartData, setChartData] = useState([]);
     const [errorMessage, setErrorMessage] = useState(false);
-
-
     useEffect(() => {
         loadPeople();
     }, [selectedSpeciesObj])
@@ -61,7 +59,9 @@ export default function ScatterPlot() {
             setLoading(false);
         })
     }
-
+     /** @param{string}  URL
+         @return{promise} resolved promise value
+     */
     const getPeopleData = (url) => {
         return new Promise((resolve, reject) => {
             axios.get(url)
@@ -74,7 +74,11 @@ export default function ScatterPlot() {
     }
 
     /**custom ToolTip function which accepts the payload as parametres and
-      returns the element containing all details of people data **/
+      returns the element containing all details of people data
+      @param{array} payload   response from people api
+      @param{boolean} active   
+      @return{html element } 
+      **/
     const CustomTooltip = ({ active, payload }) => {
         if (active) {
             return (

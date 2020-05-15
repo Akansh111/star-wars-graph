@@ -1,16 +1,16 @@
 /** dropdown component showing list of species data in dropdown.*/
 
-import React, { useEffect, useContext ,useState} from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Loading } from './Loader';
+import { Loading } from '../utility/Loader';
 import { SPECIES_URL } from '../constants/constants';
 import { StarWarContext } from '../context/CreateContext';
-import {ErrorTemplate} from './ErrorTemplate'
+import { ErrorTemplate } from '../utility/ErrorTemplate'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -46,13 +46,15 @@ export default function SimpleSelect() {
             setSpecies(allSpeciesData.flat());
             setSelectedSpeciesObj(allSpeciesData[0][0]);
             setLoading(false);
-           }).catch((err) => {
-               setErrorMessage(true);
+        }).catch((err) => {
+            setErrorMessage(true);
             console.log("Something went wrong. Please try again");
             setLoading(false);
         })
     }
-
+    /** @param{string}  URL
+        @return{promise} resolved promise value
+        */
     const getData = (url) => {
         return new Promise((resolve, reject) => {
             axios.get(url)
@@ -63,14 +65,16 @@ export default function SimpleSelect() {
                 })
         })
     }
-/** onChnage function which returns selected value from dropdown list */
+    /** onChnage function which returns selected value from dropdown list
+     * @param{object} event
+     * @return{object} selectedSpeciesObject from dropdown 
+     */
     const handleChange = (event) => {
         setSelectedSpeciesObj(species.find(selected => selected.name === event.target.value));
     };
     return (
         <div>
-            {errorMessage ? <ErrorTemplate value="Fetch species data failed"/> :
-            
+            {errorMessage ? <ErrorTemplate value="Fetch species data failed" /> :
                 !loading ?
                     <FormControl variant="filled" className={classes.formControl}>
                         <InputLabel id="demo-simple-select-filled-label">{selectedSpeciesObj ? selectedSpeciesObj.name : ''}</InputLabel>

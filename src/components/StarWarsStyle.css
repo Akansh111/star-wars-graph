@@ -1,6 +1,5 @@
 .main-container{
-  height: auto;
-  overflow: hidden; 
+  min-height: 100vh;
 }
 .app-description{
   color:white;
@@ -30,6 +29,7 @@ font-size: 16px;;
   display: inline-flex !important;
 
 }
+
 .recharts-xAxis text.recharts-label {
   transform: translate(0, 24px)
 }

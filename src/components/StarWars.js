@@ -11,7 +11,7 @@
  */
 import React from 'react';
 import ScatterPlot from './ScatterChart';
-import SimpleSelect from '../utility/DropDownUtility'
+import SimpleSelect from './DropDown'
 import { StarWarsContextProvider } from '../context/CreateContext';
 import logo from '../assets/star_wars_logo.png';
 
@@ -24,7 +24,7 @@ export const StarWarComponent = (props) => {
             <div className="card-heading col-sm-12 col-xs-12 col-md-12">
                 <div className="logo">
                     <img src={logo} width="120px" height="120px" alt="Star Wars"/>
-                    <p className="app-description">Graphical represetation of different star wars species selected from dropdown</p>
+                    <p className="app-description">Graphical representation of different star wars species selected from dropdown</p>
                 </div>
             </div>
             <StarWarsContextProvider>
